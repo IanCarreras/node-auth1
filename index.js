@@ -1,8 +1,11 @@
 const express = require("express")
 const helmet = require("helmet")
 const cors = require("cors")
+const logger = require('./middleware/logger')
+const notFound = require('./middleware/notFound')
+const error = require('./middleware/error')
 const session = require('express-session')
-const KnexSessionStore = require('connect-knex-session')(session)
+const KnexSessionStore = require('connect-session-knex')(session)
 
 const dbConfig = require('./data/dbConfig')
 const authRouter = require("./auth/auth-router.js")
@@ -17,7 +20,7 @@ server.use(logger())
 server.use(express.json())
 server.use(session({
     resave: false,
-    savedUninitialized: false,
+    saveUninitialized: false,
     secret: 'keep it secret, keep if safe!',
     cookie: {
         httpOnly: true,
@@ -30,8 +33,8 @@ server.use(session({
     })
 }))
 
-server.use("/auth", authRouter)
-server.use("/users", usersRouter)
+server.use("/api", authRouter)
+server.use("/api/users", usersRouter)
 
 server.use(notFound())
 server.use(error())

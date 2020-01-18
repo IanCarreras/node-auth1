@@ -23,22 +23,18 @@ router.post('/login', async (req, res, next) => {
 
         if (user && passwordValid) {
             req.session.user = user
-            
+
             res.status(200).json({
                 message: `Welcome ${user.username}!`,
             })
         } else {
             res.status(401).json({
-                message: 'Invalid Credentials',
+                message: 'You shall not pass!',
             })
         }
     } catch (err) {
         next(err)
     }
-})
-
-router.get('/users', restricted(), (req, res, next) => {
-
 })
 
 module.exports = router
